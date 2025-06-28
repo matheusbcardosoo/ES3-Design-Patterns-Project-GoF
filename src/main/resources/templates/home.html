@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Clínica Veterinária</title>
+</head>
+<body>
+    <div th:replace="layout :: html(content=~{::div.content}, title='Dashboard - Clínica Veterinária')">
+        <div class="content">
+            <h1 class="mb-4">Dashboard</h1>
+
+            <div class="row">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Clientes Cadastrados</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${totalClientes}">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-people fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Animais Cadastrados</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${totalAnimais}">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-star fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Veterinários</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${totalVeterinarios}">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-briefcase-medical fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Consultas Agendadas</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${totalConsultas}">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-calendar-check fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Padrões de Projeto Implementados</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Este sistema de Clínica Veterinária implementa diversos padrões de projeto:</p>
+                            <ul>
+                                <li><strong>MVC (Model-View-Controller)</strong>: Separação clara de responsabilidades entre modelo (domain, repositories), visualização (templates Thymeleaf) e controle (controllers).</li>
+                                <li><strong>DAO (Data Access Object)</strong>: Utilizado para abstrair e encapsular o acesso aos dados através das classes AnimalDAO, ClienteDAO, ConsultaDAO e VeterinarioDAO.</li>
+                                <li><strong>Singleton</strong>: Utilizado na classe ClinicaVeterinaria para garantir instância única.</li>
+                                <li><strong>Factory</strong>: Implementado para criação de diferentes tipos de usuários e animais.</li>
+                                <li><strong>Builder</strong>: Utilizado para construir objetos complexos como Cliente, Animal e Consulta.</li>
+                                <li><strong>Adapter</strong>: Implementado para integração com sistema de pagamento externo.</li>
+                                <li><strong>Facade</strong>: Simplifica o acesso a subsistemas complexos através do AgendamentoFacade.</li>
+                                <li><strong>Strategy</strong>: Utilizado para implementar diferentes estratégias de validação de objetos de domínio, permitindo validações específicas para cada tipo de objeto sem depender de validações HTML.</li>
+                                <li><strong>Command</strong>: Implementado para encapsular operações relacionadas às consultas, permitindo registrar, executar e desfazer operações como agendamento, cancelamento e busca de consultas.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Informações Técnicas</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Esta aplicação foi construída utilizando:</p>
+                            <ul>
+                                <li><strong>Spring Boot</strong>: Framework Java para desenvolvimento de aplicações</li>
+                                <li><strong>Thymeleaf</strong>: Engine de templates para front-end</li>
+                                <li><strong>MongoDB</strong>: Banco de dados NoSQL para persistência de dados</li>
+                                <li><strong>Docker</strong>: Contêinerização do banco de dados</li>
+                                <li><strong>Bootstrap</strong>: Framework CSS para estilização</li>
+                            </ul>
+                            <p>A arquitetura segue princípios de Clean Code e SOLID, com separação clara de responsabilidades.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

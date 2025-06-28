@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Consulta - Clínica Veterinária</title>
+</head>
+<body>
+    <div th:replace="layout :: html(content=~{::div.content}, title=${consulta.id == null ? 'Nova Consulta' : 'Editar Consulta'} + ' - Clínica Veterinária')">
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 th:text="${consulta.id == null ? 'Nova Consulta' : 'Editar Consulta'}">Formulário de Consulta</h1>
+                <a th:href="@{/consultas}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar
+                </a>
+            </div>
+
+            <!-- Exibir mensagens de erro de validação -->
+            <div class="alert alert-danger" th:if="${erros != null && !erros.empty}">
+                <ul>
+                    <li th:each="erro : ${erros}" th:text="${erro}"></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/consultas}" th:object="${consulta}" method="post">
+                        <!-- ID oculto para edição -->
+                        <input type="hidden" th:field="*{id}" />
+
+                        <!-- Dados da Consulta -->
+                        <h5 class="card-title mb-3">Dados da Consulta</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="petId" class="form-label">Animal*</label>
+                                <select class="form-select" id="petId" name="petId">
+                                    <option value="">Selecione um animal...</option>
+                                    <option th:each="animal : ${animais}"
+                                            th:value="${animal.id}"
+                                            th:text="${animal.nome + ' (' + animal.especie + ')'}"
+                                            th:selected="${animal != null && consulta.pet != null && animal.id == consulta.pet.id}">
+                                        Nome do Animal (Espécie)
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="veterinarioId" class="form-label">Veterinário*</label>
+                                <select class="form-select" id="veterinarioId" name="veterinarioId">
+                                    <option value="">Selecione um veterinário...</option>
+                                    <option th:each="vet : ${veterinarios}"
+                                            th:value="${vet.id}"
+                                            th:text="${vet.nome + ' (' + vet.crmv + ')'}"
+                                            th:selected="${vet != null && consulta.veterinario != null && vet.id == consulta.veterinario.id}">
+                                        Nome do Veterinário (CRMV)
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="data" class="form-label">Data e Hora*</label>
+                                <input type="text" class="form-control" id="data" th:field="*{data}"
+                                       placeholder="dd/MM/yyyy - HH:mm">
+                                <small class="form-text text-muted">Formato: dia/mês/ano - hora:minuto</small>
+                            </div>
+                        </div>
+
+                        <!-- Diagnóstico e Medicamento -->
+                        <h5 class="card-title mb-3">Diagnóstico e Prescrição</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="diagnostico" class="form-label">Diagnóstico</label>
+                                <textarea class="form-control" id="diagnostico" th:field="*{diagnostico}" rows="3"></textarea>
+                                <small class="form-text text-muted">Preencha após a consulta ser realizada</small>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <label for="medicamento" class="form-label">Medicamento</label>
+                                <textarea class="form-control" id="medicamento" th:field="*{medicamento}" rows="3"></textarea>
+                                <small class="form-text text-muted">Preencha a prescrição médica, se houver</small>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/consultas}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

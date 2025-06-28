@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Animal - Clínica Veterinária</title>
+</head>
+<body>
+    <div th:replace="layout :: html(content=~{::div.content}, title=${animal.id == null ? 'Novo Animal' : 'Editar Animal'} + ' - Clínica Veterinária')">
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 th:text="${animal.id == null ? 'Novo Animal' : 'Editar Animal'}">Formulário de Animal</h1>
+                <a th:href="@{/animais}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar
+                </a>
+            </div>
+
+            <!-- Exibir mensagens de erro de validação -->
+            <div class="alert alert-danger" th:if="${erros != null && !erros.empty}">
+                <ul>
+                    <li th:each="erro : ${erros}" th:text="${erro}"></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/animais}" th:object="${animal}" method="post">
+                        <!-- ID oculto para edição -->
+                        <input type="hidden" th:field="*{id}" />
+
+                        <!-- Dados Básicos -->
+                        <h5 class="card-title mb-3">Dados do Animal</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nome" class="form-label">Nome*</label>
+                                <input type="text" class="form-control" id="nome" th:field="*{nome}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipo" class="form-label">Tipo de Animal*</label>
+                                <select class="form-select" id="tipo" name="tipo">
+                                    <option value="Cachorro" th:selected="${animal.getClass().getSimpleName() == 'Cachorro'}">Cachorro</option>
+                                    <option value="Gato" th:selected="${animal.getClass().getSimpleName() == 'Gato'}">Gato</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="especie" class="form-label">Espécie*</label>
+                                <input type="text" class="form-control" id="especie" th:field="*{especie}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="raca" class="form-label">Raça</label>
+                                <input type="text" class="form-control" id="raca" th:field="*{raca}">
+                            </div>
+                        </div>
+
+                        <!-- Características -->
+                        <h5 class="card-title mb-3">Características</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="idade" class="form-label">Idade (anos)*</label>
+                                <input type="number" class="form-control" id="idade" th:field="*{idade}">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="peso" class="form-label">Peso (kg)*</label>
+                                <input type="number" class="form-control" id="peso" th:field="*{peso}" step="0.1">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="genero" class="form-label">Gênero*</label>
+                                <select class="form-select" id="genero" th:field="*{genero}">
+                                    <option value="">Selecione...</option>
+                                    <option value="Macho">Macho</option>
+                                    <option value="Fêmea">Fêmea</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="cor" class="form-label">Cor</label>
+                                <input type="text" class="form-control" id="cor" th:field="*{cor}">
+                            </div>
+                        </div>
+
+                        <!-- Proprietário -->
+                        <h5 class="card-title mb-3">Proprietário</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <label for="cliente" class="form-label">Selecione o Proprietário</label>
+                                <select class="form-select" id="cliente" name="clienteId">
+                                    <option value="">Selecione um proprietário...</option>
+                                    <option th:each="cliente : ${clientes}"
+                                            th:value="${cliente.id}"
+                                            th:text="${cliente.nome}"
+                                            th:selected="${cliente != null && animal.proprietario != null && cliente.id == animal.proprietario.id}">
+                                        Nome do Cliente
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/animais}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

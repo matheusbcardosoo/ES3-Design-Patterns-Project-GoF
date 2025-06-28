@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Cliente - Clínica Veterinária</title>
+</head>
+<body>
+    <div th:replace="layout :: html(content=~{::div.content}, title=${cliente.id == null ? 'Novo Cliente' : 'Editar Cliente'} + ' - Clínica Veterinária')">
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 th:text="${cliente.id == null ? 'Novo Cliente' : 'Editar Cliente'}">Formulário de Cliente</h1>
+                <a th:href="@{/clientes}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar
+                </a>
+            </div>
+
+            <!-- Exibir mensagens de erro de validação -->
+            <div class="alert alert-danger" th:if="${erros != null && !erros.empty}">
+                <ul>
+                    <li th:each="erro : ${erros}" th:text="${erro}"></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/clientes}" th:object="${cliente}" method="post">
+                        <!-- ID oculto para edição -->
+                        <input type="hidden" th:field="*{id}" />
+
+                        <!-- Dados Pessoais -->
+                        <h5 class="card-title mb-3">Dados Pessoais</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="nome" class="form-label">Nome Completo*</label>
+                                <input type="text" class="form-control" id="nome" th:field="*{nome}">
+                            </div>
+                        </div>
+
+                        <!-- Telefone -->
+                        <h5 class="card-title mb-3">Telefone</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label for="ddd" class="form-label">DDD</label>
+                                <input type="text" class="form-control" id="ddd"
+                                       th:field="*{telefone.ddd}" placeholder="11" maxlength="2">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="numero" class="form-label">Número*</label>
+                                <input type="text" class="form-control" id="numero"
+                                       th:field="*{telefone.numero}"
+                                       placeholder="99999-9999" maxlength="15">
+                            </div>
+                        </div>
+
+                        <!-- Endereço -->
+                        <h5 class="card-title mb-3">Endereço</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="cep" class="form-label">CEP</label>
+                                <input type="text" class="form-control" id="cep"
+                                       th:field="*{endereco.cep}" placeholder="00000-000">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="logradouro" class="form-label">Logradouro*</label>
+                                <input type="text" class="form-control" id="logradouro"
+                                       th:field="*{endereco.logradouro}">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="numero" class="form-label">Número</label>
+                                <input type="text" class="form-control" id="numero"
+                                       th:field="*{endereco.numero}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="complemento" class="form-label">Complemento</label>
+                                <input type="text" class="form-control" id="complemento"
+                                       th:field="*{endereco.complemento}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bairro" class="form-label">Bairro</label>
+                                <input type="text" class="form-control" id="bairro"
+                                       th:field="*{endereco.bairro}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="cidade" class="form-label">Cidade*</label>
+                                <input type="text" class="form-control" id="cidade"
+                                       th:field="*{endereco.cidade}">
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label for="estado" class="form-label">Estado</label>
+                                <input type="text" class="form-control" id="estado"
+                                       th:field="*{endereco.estado}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="pais" class="form-label">País</label>
+                                <input type="text" class="form-control" id="pais"
+                                       th:field="*{endereco.pais}" value="Brasil">
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/clientes}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

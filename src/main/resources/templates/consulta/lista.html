@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas - Clínica Veterinária</title>
+</head>
+<body>
+    <div th:replace="layout :: html(content=~{::div.content}, title='Consultas - Clínica Veterinária')">
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Consultas</h1>
+                <a th:href="@{/consultas/nova}" class="btn btn-primary">
+                    <i class="bi bi-calendar-plus me-2"></i>Nova Consulta
+                </a>
+            </div>
+
+            <!-- Formulários de busca -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="searchTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pet-tab" data-bs-toggle="tab"
+                                data-bs-target="#pet-search" type="button" role="tab">
+                                Buscar por Pet
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="veterinario-tab" data-bs-toggle="tab"
+                                data-bs-target="#veterinario-search" type="button" role="tab">
+                                Buscar por Veterinário
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="data-tab" data-bs-toggle="tab"
+                                data-bs-target="#data-search" type="button" role="tab">
+                                Buscar por Data
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content p-3" id="searchTabsContent">
+                        <div class="tab-pane fade show active" id="pet-search" role="tabpanel">
+                            <form th:action="@{/consultas/buscar/pet}" method="get" class="row g-3">
+                                <div class="col-md-10">
+                                    <input type="text" name="nomePet" class="form-control"
+                                        placeholder="Buscar por nome do animal..."
+                                        th:value="${tipoBusca == 'pet' ? termoBusca : ''}">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-secondary w-100">
+                                        <i class="bi bi-search me-2"></i>Buscar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="veterinario-search" role="tabpanel">
+                            <form th:action="@{/consultas/buscar/veterinario}" method="get" class="row g-3">
+                                <div class="col-md-10">
+                                    <input type="text" name="nomeVet" class="form-control"
+                                        placeholder="Buscar por nome do veterinário..."
+                                        th:value="${tipoBusca == 'veterinario' ? termoBusca : ''}">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-secondary w-100">
+                                        <i class="bi bi-search me-2"></i>Buscar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="data-search" role="tabpanel">
+                            <form th:action="@{/consultas/buscar/data}" method="get" class="row g-3">
+                                <div class="col-md-10">
+                                    <input type="text" name="data" class="form-control"
+                                        placeholder="Buscar por data (ex: 08/04/2025)..."
+                                        th:value="${tipoBusca == 'data' ? termoBusca : ''}">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-secondary w-100">
+                                        <i class="bi bi-search me-2"></i>Buscar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de consultas -->
+            <div class="card">
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(consultas)}" class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>Nenhuma consulta encontrada.
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(consultas)}" class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Animal</th>
+                                    <th>Veterinário</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Medicamento</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="consulta : ${consultas}">
+                                    <td th:text="${consulta.data}">Data</td>
+                                    <td th:text="${consulta.pet != null ? consulta.pet.nome : 'N/A'}">Animal</td>
+                                    <td th:text="${consulta.veterinario != null ? consulta.veterinario.nome : 'N/A'}">Veterinário</td>
+                                    <td th:text="${consulta.diagnostico != null && !consulta.diagnostico.isEmpty() ? consulta.diagnostico : 'Não realizado'}">Diagnóstico</td>
+                                    <td th:text="${consulta.medicamento != null && !consulta.medicamento.isEmpty() ? consulta.medicamento : 'Não prescrito'}">Medicamento</td>
+                                    <td>
+                                        <span th:if="${consulta.diagnostico != null && !consulta.diagnostico.isEmpty()}"
+                                              class="badge bg-success">Finalizada</span>
+                                        <span th:unless="${consulta.diagnostico != null && !consulta.diagnostico.isEmpty()}"
+                                              class="badge bg-warning text-dark">Pendente</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a th:href="@{/consultas/{id}(id=${consulta.id})}" class="btn btn-sm btn-info">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a th:href="@{/consultas/{id}/editar(id=${consulta.id})}" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a th:href="@{/consultas/{id}/excluir(id=${consulta.id})}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Tem certeza que deseja cancelar esta consulta?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

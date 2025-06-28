@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Veterinários - Clínica Veterinária</title>
+</head>
+<body>
+    <div th:replace="layout :: html(content=~{::div.content}, title='Veterinários - Clínica Veterinária')">
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Veterinários</h1>
+                <a th:href="@{/veterinarios/novo}" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-2"></i>Novo Veterinário
+                </a>
+            </div>
+
+            <!-- Formulário de busca -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form th:action="@{/veterinarios/buscar}" method="get" class="row g-3">
+                        <div class="col-md-10">
+                            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome..."
+                                th:value="${termoBusca}">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tabela de veterinários -->
+            <div class="card">
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(veterinarios)}" class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>Nenhum veterinário encontrado.
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(veterinarios)}" class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>CRMV</th>
+                                    <th>Telefone</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="veterinario : ${veterinarios}">
+                                    <td th:text="${veterinario.nome}">Nome do Veterinário</td>
+                                    <td th:text="${veterinario.crmv}">CRMV-SP 12345</td>
+                                    <td th:if="${veterinario.telefone != null}"
+                                        th:text="${veterinario.telefone.ddd + ' ' + veterinario.telefone.numero}">
+                                        Telefone
+                                    </td>
+                                    <td th:unless="${veterinario.telefone != null}">Não informado</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a th:href="@{/veterinarios/{id}(id=${veterinario.id})}" class="btn btn-sm btn-info">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a th:href="@{/veterinarios/{id}/editar(id=${veterinario.id})}" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a th:href="@{/veterinarios/{id}/excluir(id=${veterinario.id})}"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Tem certeza que deseja excluir este veterinário?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
